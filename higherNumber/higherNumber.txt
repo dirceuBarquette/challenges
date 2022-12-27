@@ -1,0 +1,13 @@
+No desafio de hoje, você deverá implementar uma função que recebe uma lista de números positivos, chamada nums. A função deve combinar os números da lista e retornar o maior número possível dentre as possíveis combinações.
+
+Exemplo 1
+let nums = [10,2]
+Output: 210
+
+
+Exemplo 2
+let nums = [3,30,34,5,9]
+Output: 9534330
+
+
+Qualquer linguagem pode ser utilizada para solucionar este challenge.
