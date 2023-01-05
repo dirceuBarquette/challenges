@@ -1,0 +1,23 @@
+Seu desafio será implementar uma calculadora básica para avaliar uma string de expressão simples.
+
+A string de expressão contém apenas números inteiros não negativos, operadores
+'+' , '-', 'x','/' e parênteses abertos '(' e fechados ')'. A divisão inteira deve ser truncada para zero.
+
+OBS: Você não pode usar nenhuma função built-in que avalia strings como expressões matemáticas, como por exemplo eval().
+
+Exemplo 1
+let string = "1+1"
+Output: 2
+
+
+Exemplo 2
+let string = "6-4/2"
+Output: 4
+
+
+Exemplo 3
+let string = "2*(5+5*2)/3+(6/2+8)"
+Output: 21
+
+
+Qualquer linguagem pode ser utilizada para solucionar este challenge.
