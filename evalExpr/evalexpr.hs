@@ -1,14 +1,16 @@
+import Data.Char (isDigit)
+
+main :: IO ()
+main = do
+   putStrLn "Insira a expressão"
+   ln <- getLine
+   putStrLn $ show . head . eval . str2RPN $ ln
+
 data Op = Mns | Add | Div | Tms  
-            deriving (Show,Eq,Ord,Enum,Bounded)
+            deriving Show
 
-data Expression = Single Int | Expr Op Expression Expression
+data Expression = Expr Op Int Int
                      deriving Show
-
-readOp :: String -> Op
-readOp c | c == "+" = Add
-         | c == "-" = Mns
-         | c == "/" = Div
-         | c == "*" = Tms
 
 exec :: Op -> Int -> Int -> Int
 exec Add x y = x + y
@@ -16,35 +18,72 @@ exec Mns x y = x - y
 exec Tms x y = x * y
 exec Div x y = x `div` y
 
-eval :: Expression -> [Int]
-eval (Single x)   = [x]
-eval (Expr o l r) = [exec o l' r' | l'<- eval l, r'<- eval r ]
+instance Eq Op where
+   Mns == Add = True 
+   Add == Mns = True 
+   Div == Tms = True
+   Tms == Div = True 
+   _   == _   = False
 
-string1 = "1+1"
-string2 = "6-4/2"
-string3 = "2*(5+5*2)/3+(6/2+8)"
+instance Ord Op where
+   Mns <= Div = True
+   Mns <= Tms = True
+   Add <= Div = True
+   Add <= Tms = True
+   _   <= _   = False
 
-str2Expr :: String -> Expression
-str2Expr = go . sepStr
+readOp :: String -> Op
+readOp c | c == "+" = Add
+         | c == "-" = Mns
+         | c == "/" = Div
+         | c == "*" = Tms
+         
+type OpStack = [String]
+type Output  = [String]
+
+str2RPN :: String -> Output
+str2RPN = go [] [] 
    where
-      go (o,l,r)  
-         | not . hasOp $ r = Expr (readOp o) (Single (read l::Int)) (Single (read r::Int))
-         | otherwise       = Expr (readOp o) (Single (read l::Int)) (go . sepStr $ r)
-
-hasOp :: String -> Bool
-hasOp xs | length (filter (\x-> elem x ops) xs) > 0 = True
-         | otherwise                                = False
-
-sepStr :: String -> (String,String,String)
-sepStr xs = (op,left,right)
-  where
-    left   = takeWhile isNotOp xs
-    right  = drop 1 wholeR
-    op     = take 1 wholeR
-    wholeR = dropWhile isNotOp xs
+      go :: OpStack -> Output -> String -> Output
+      go ops output [] = output++ops
+      go ops output input
+         | isNotOp inputHead = go ops (output++[takeNums]) dropNums
+         | inputHead == '('  = go ([inputHead]:ops) output decrInput
+         | inputHead == ')'  = go (drop 1 $ dropWhile ("("/=) ops) (output++(takeWhile ("("/=) ops)) decrInput
+         | ops == []         = go ([inputHead]:ops) output decrInput
+         | head ops == "("   = go ([inputHead]:ops) output decrInput
+         | inputHeadAsOp > readOp (head ops) =
+            go ([inputHead]:ops) output decrInput 
+         | inputHeadAsOp <= readOp (head ops) = 
+            go (drop 1 ops) (output++[head ops]) input
+         | inputHeadAsOp == readOp (head ops) = 
+            go (drop 1 ops) (output++[head ops]) input
+         where
+            takeNums      = takeWhile isNotOp input
+            dropNums      = dropWhile isNotOp input
+            decrInput     = drop 1 input
+            inputHead     = head input
+            inputHeadAsOp = readOp [inputHead]
 
 ops :: [Char]
 ops = ['(',')','+','-','*','/']
 
 isNotOp :: Char -> Bool
 isNotOp c = not . elem c $ ops
+
+eval :: [String] -> [Int]
+eval = foldl (\acc x-> let (newNumStack,toExec) = breakNumStack acc
+                       in
+                          if isNum x 
+                           then acc++[(read x::Int)]
+                           else newNumStack++[exec (readOp x) (toExec !! 0) (toExec !! 1)]
+             ) []
+
+breakNumStack :: [Int] -> ([Int],[Int])
+breakNumStack nums = (newNumStack,toExec)
+   where
+      newNumStack = reverse . (drop 2) . reverse $ nums
+      toExec      = drop ((length nums) - 2) nums
+
+isNum :: String -> Bool
+isNum = foldl (\acc x-> acc && (if isDigit x then True else False)) True
