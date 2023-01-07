@@ -1,3 +1,4 @@
+{-# OPTIONS_GHC -Wno-incomplete-patterns #-}
 import Data.Char (isDigit)
 
 main :: IO ()
@@ -49,8 +50,8 @@ str2RPN = go [] []
       go ops output input
          | isNotOp inputHead = go ops (output++[takeNums]) dropNums
          | inputHead == '('  = go ([inputHead]:ops) output decrInput
-         | inputHead == ')'  = go (drop 1 $ dropWhile ("("/=) ops) (output++(takeWhile ("("/=) ops)) decrInput
-         | ops == []         = go ([inputHead]:ops) output decrInput
+         | inputHead == ')'  = go (drop 1 $ dropWhile ("("/=) ops) (output++takeWhile ("("/=) ops) decrInput
+         | null ops          = go ([inputHead]:ops) output decrInput
          | head ops == "("   = go ([inputHead]:ops) output decrInput
          | inputHeadAsOp > readOp (head ops) =
             go ([inputHead]:ops) output decrInput 
@@ -69,21 +70,21 @@ ops :: [Char]
 ops = ['(',')','+','-','*','/']
 
 isNotOp :: Char -> Bool
-isNotOp c = not . elem c $ ops
+isNotOp c = notElem c $ ops
 
 eval :: [String] -> [Int]
 eval = foldl (\acc x-> let (newNumStack,toExec) = breakNumStack acc
                        in
                           if isNum x 
-                           then acc++[(read x::Int)]
-                           else newNumStack++[exec (readOp x) (toExec !! 0) (toExec !! 1)]
+                           then acc++[read x::Int]
+                           else newNumStack++[exec (readOp x) (head toExec) (toExec !! 1)]
              ) []
 
 breakNumStack :: [Int] -> ([Int],[Int])
 breakNumStack nums = (newNumStack,toExec)
    where
-      newNumStack = reverse . (drop 2) . reverse $ nums
-      toExec      = drop ((length nums) - 2) nums
+      newNumStack = reverse . drop 2 . reverse $ nums
+      toExec      = drop (length nums - 2) nums
 
 isNum :: String -> Bool
-isNum = foldl (\acc x-> acc && (if isDigit x then True else False)) True
+isNum = foldl (\acc x-> acc && isDigit x) True
