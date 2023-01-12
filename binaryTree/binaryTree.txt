@@ -1,0 +1,12 @@
+Vamos começar de forma simples. Você receberá uma raiz root de uma árvore binária e deverá retornar a soma dos valores presentes em seus nós mais profundos. 
+
+Você pode consultar as imagens como referência para os exemplos!
+
+Exemplo 1
+let root = [1,2,3,4,5,null,6,7,8,null,null,null,9]
+Output: 24
+
+
+Exemplo 2
+let root = [12,13,14,4,14,2,6,18,null,2,8,null,null,null,10]
+Output: 38
