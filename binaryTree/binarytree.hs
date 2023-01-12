@@ -1,5 +1,4 @@
 import Data.Char (isDigit)
-import GHC.Float (float2Int)
 
 main :: IO ()
 main = do 
@@ -31,8 +30,9 @@ getLevels :: [Maybe Int] -> [[Maybe Int]]
 getLevels = go (0,[])
    where
       go (_,lvls) [] = lvls 
-      go (p,lvls) xs = let pp = float2Int (2**p)
-                       in go (p+1,lvls++[take pp xs]) $ drop pp xs
+      go (p,lvls) xs = let chunk | length lvls == 0 = 1
+                                 | otherwise = (2*) . length . filter (/=Nothing) $ lvls !! (p-1)
+                       in go (p+1,lvls++[take chunk xs]) $ drop chunk xs
 
 justInt :: Maybe Int -> Int
 justInt Nothing  = 0
