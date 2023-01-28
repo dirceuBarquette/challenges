@@ -1,0 +1,29 @@
+Você terá um array  e um tamanho máximo maxWidth. Sua tarefa será formatar este texto de acordo com o tamanho fornecido em maxWidth.
+
+As regras são as seguintes:
+▪️O número de caracteres de cada linha deverá ter exatamente o valor de maxWidth 
+▪️Cada linha deverá estar completamente justificada (esquerda e direita). 
+▪️O algoritmo deve colocar o maior número possível de palavras em cada linha. Quando necessário, deve-se adicionar espaços extras para que cada linha tenha exatamente a quantidade de caracteres estipulado em maxWidth
+▪️Os espaços extras entre as palavras devem ser distribuídos de maneira equilibrada. 
+▪️Quando o número de espaços em uma linha não for divisível igualmente entre as palavras, as posições vazias à esquerda deverão ter mais espaços do que as posições à direita. 
+▪️A última linha deve ser justificada à esquerda e não deve haver espaço extra entre as palavras.
+▪️Se o maxWidth receber um valor menor do que o tamanho de alguma palavra, retorne word[i] > maxWidth
+
+Exemplo 1
+let words = ["Este", "é", "um", "exemplo", "de", "justificação", "de", "texto."]
+const maxWidth = 15
+
+Output: ["Este    é    um",
+"exemplo      de",
+"justificação de",
+"texto.         "]
+
+Exemplo 2
+let words = ["Este", "challenge", "é", "muito", "difícil.", "Pelo", "visto", "vou", "quebrar", "a", "cabeça", "de", "tanto", "pensar!"]
+const maxWidth = 20
+
+Output: ["Este   challenge   é",
+"muito  difícil. Pelo",
+"visto  vou quebrar a",
+"cabeça    de   tanto",
+"pensar!             "]
