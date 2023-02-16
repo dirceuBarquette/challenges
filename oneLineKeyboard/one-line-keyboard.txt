@@ -1,0 +1,42 @@
+imagine que você tem um teclado especial, onde todas as letras estão em uma única linha. Quando você quer escrever uma palavra, precisa mover seu dedo até a tecla da letra que você quer escrever.
+
+O tempo que leva para você mover seu dedo de uma tecla para outra depende da distância entre as teclas. Por exemplo, se a letra que você está digitando está perto da letra anterior, leva pouco tempo para mover seu dedo até lá. Se a letra está longe, leva mais tempo.
+
+Seu desafio é escrever uma função que calcule quanto tempo leva para você escrever uma palavra inteira, movendo o dedo apenas uma vez.
+
+Regras:
+▪️O tamanho do keyboard deve ser sempre 26
+▪️As letras poderão não seguir a ordem do alfabeto
+▪️As letras deverão ser sempre minúsculas e nunca poderão se repetir
+▪️Seu dedo sempre partirá do íncice 0
+
+Exemplo 1
+const keyboard = "abcdefghijklmnopqrstuvwxyz"
+const world = "eu"
+
+Output: 20
+
+Motivo: Para digitar "e", seu dedo se moverá do índice 0 para o 4, depois para digitar "u", seu dedo se moverá do índice 4 até o índice 20
+
+Motivo:
+do índice 0 até o índice 4 = 4, 
+do índice 4 até o 20 = 16,
+tempo total: 16 + 4 = 20
+
+Exemplo 2
+const keyboard = "opqrstuvwxyzabcdefghijklmn"
+const world = "amo"
+
+Output: 48
+
+Motivo:
+do índice 0 até o índice 12 = 12, 
+do índice 12 até o 24 = 12, 
+do índice 24 de volta até o índice 0 = 24
+tempo total: 12 + 12 + 24 = 48
+
+const keyboard = "dlpkvmesjfnrcxqiwzuabohygt"
+const world = "challenges"
+
+Output: 73
+
