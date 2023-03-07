@@ -6,12 +6,7 @@ main = do
    maxWidth <- getLine
    let mw   = read maxWidth :: Int 
    let gw   = getWords mw $ words txt
-   putStrLn $ show $ justify mw gw
-
-w1="Este e um exemplo de justificacao de texto."
-maxWidth1 = 15
-w2="Este challenge e muito dificil. Pelo visto vou quebrar a cabeca de tanto pensar!"
-maxWidth2 = 20
+   putStrLn $ unwords $ justify mw gw
 
 justify :: Int -> [[String]] -> [String]
 justify mw lns = go (length lns) [] lns
